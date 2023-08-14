@@ -42,10 +42,5 @@ Object.keys(db).forEach((modelName) => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-// db.tblTrainer = require("./models/trainer")(sequelize, Sequelize);
-// db.user = require("./user.js")(sequelize, Sequelize);
-// db.user = require("./user.js")(sequelize, Sequelize);
-// db.memberRoomChat = require("./memberroomchat.js")(sequelize, Sequelize);
-// db.roomChat = require("./roomchat.js")(sequelize, Sequelize);
-// db.messages = require("./messages.js")(sequelize, Sequelize);
+
 module.exports = db;

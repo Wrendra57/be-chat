@@ -47,10 +47,9 @@ const createRoomChatPersonal = async ({ uuid1, uuid2 }) => {
 
 const listRoomChat = async ({ uuid }) => {
   try {
-    console.log(uuid);
-    const getListRoom = await memberRoomChatRepository.getListMemberRoomChat(
-      uuid
-    );
+    // console.log(uuid);
+    const getListRoom = await roomChatRepository.GetListRoomChat(uuid);
+    // console.log(getListRoom);
     return {
       status: 200,
       message: "success getListRoom",

@@ -28,7 +28,7 @@ const createGroupRoom = async (req, res) => {
 
 const listRoomChat = async (req, res) => {
   try {
-    console.log(req.user.uuid);
+    // console.log(req.user.uuid);
     const listRoom = await roomChatService.listRoomChat({
       uuid: req.user.uuid,
     });
