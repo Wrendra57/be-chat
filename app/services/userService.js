@@ -1,16 +1,45 @@
-const { v4: uuidv4 } = require("uuid");
 const UserRepository = require("../repositories/userRepository");
 const Bcrypt = require("../utils/bycrypt");
 const { otpGen } = require("otp-gen-agent");
 const EmailService = require("./emailService");
 const jwt = require("jsonwebtoken");
 const { JWT } = require("../lib/constant");
-
+const UUID = require("../utils/uuid");
 const RegisterUser = async ({ email, password, name }) => {
   // console.log(email);
   try {
+    if (name === "") {
+      return {
+        status: 400,
+        message: "Nama tidak boleh kosong",
+        data: null,
+      };
+    }
+    if (email === "") {
+      return {
+        status: 400,
+        message: "Email tidak boleh kosong",
+        data: null,
+      };
+    } else {
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+        return {
+          status: 400,
+          message: "Email tidak valid",
+          data: null,
+        };
+        return;
+      }
+    }
+    if (password === "") {
+      return {
+        status: 400,
+        message: "Password tidak boleh kosong",
+        data: null,
+      };
+    }
+
     const emailCheck = await UserRepository.findByEmail(email);
-    console.log(emailCheck);
     if (emailCheck) {
       return {
         status: 400,
@@ -19,12 +48,12 @@ const RegisterUser = async ({ email, password, name }) => {
       };
     }
 
-    const uuid = await uuidv4();
+    const uuid = await UUID.Generate();
     // console.log(password);
     const otp = await otpGen();
-    console.log(otp);
+    // console.log(otp);
     const hassedpassword = await Bcrypt.DecodePassword(password);
-    console.log(hassedpassword);
+
     const createUser = await UserRepository.CreateUser({
       uuid: uuid,
       email: email,
@@ -41,11 +70,12 @@ const RegisterUser = async ({ email, password, name }) => {
       template: "sendOTP",
       isi: createUser.otp,
     });
-    console.log(sendOTP);
+    user = JSON.parse(JSON.stringify(createUser));
+    delete user.password;
     return {
       status: 200,
       message: "succses create data",
-      data: createUser,
+      data: user,
     };
   } catch (error) {
     console.log(error);
@@ -59,7 +89,7 @@ const RegisterUser = async ({ email, password, name }) => {
 
 const VerifikasiOTP = async ({ email, otp }) => {
   try {
-    console.log(email);
+    // console.log(email);
     // console.log(otp);
 
     const checkEmail = await UserRepository.findByEmail(email);
@@ -73,8 +103,8 @@ const VerifikasiOTP = async ({ email, otp }) => {
     }
     if (!checkEmail.otp || checkEmail.enabled === true) {
       return {
-        status: 400,
-        message: "Akun sudah diverikasi",
+        status: 200,
+        message: "Akun sudah diverikasi silahkan Login",
         data: null,
       };
     }

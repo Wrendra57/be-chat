@@ -6,14 +6,14 @@ const RegisterUser = async (req, res, next) => {
 
     // console.log(uuid);
     const { email, password, name } = req.body;
-    console.log(email);
+    // console.log(email);
     const createUser = await userService.RegisterUser({
       email: email,
       password: password,
       name: name,
     });
 
-    console.log(createUser);
+
 
     return res.status(createUser.status).json(createUser);
   } catch (error) {

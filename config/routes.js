@@ -45,7 +45,7 @@ apiRouter.get(
   controllers.api.v1.userControler.getUserByName
 );
 
-// Chatt
+// Room Chatt
 apiRouter.post(
   "/api/v1/roomChatsPersonal/:uuid",
   middleware.parseToken,
@@ -61,6 +61,13 @@ apiRouter.get(
   "/api/v1/roomChats",
   middleware.parseToken,
   controllers.api.v1.roomChatController.listRoomChat
+);
+
+// create message
+apiRouter.post(
+  "/api/v1/Chats",
+  middleware.parseToken,
+  controllers.api.v1.chatController.createChat
 );
 /**
  * TODO: Delete this, this is just a demonstration of

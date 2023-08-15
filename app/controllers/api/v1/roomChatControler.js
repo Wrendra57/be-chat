@@ -23,6 +23,7 @@ const createGroupRoom = async (req, res) => {
       member: req.body.member,
       nameGroup: req.body.nameGroup,
     });
+    return res.status(createGroup.status).json(createGroup);
   } catch (error) {}
 };
 

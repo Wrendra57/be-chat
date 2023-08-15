@@ -1,15 +1,30 @@
 const roomChatRepository = require("../repositories/roomChatRepository");
 const memberRoomChatRepository = require("../repositories/memberRoomChatRepository");
-const { v4: uuidv4 } = require("uuid");
+// const { v4: uuidv4 } = require("uuid");
+const UUID = require("../utils/uuid");
 const createRoomChatPersonal = async ({ uuid1, uuid2 }) => {
   try {
-    // console.log(uuid1);
-    // console.log(uuid2);
+    // check
+    const checkRoomPersonal = await roomChatRepository.checkRoomPersonal({
+      uuid1: uuid1,
+      uuid2: uuid2,
+    });
+    console.log(checkRoomPersonal);
+    if (checkRoomPersonal.length > 0) {
+      return {
+        status: 200,
+        message: "room sudah dibuat",
+        data: checkRoomPersonal,
+      };
+    }
+    const uuid = await UUID.Generate();
+    console.log(uuid);
+
     const payload = {
-      id: `${uuid1}&${uuid2}`,
+      id: uuid,
       isGroup: false,
     };
-    // console.log(payload);
+
     const createRoomChat = await roomChatRepository.CreateRoomChat(payload);
     console.log(createRoomChat);
 
@@ -66,18 +81,20 @@ const listRoomChat = async ({ uuid }) => {
 
 const CreateGroup = async ({ uuid, member, nameGroup }) => {
   try {
-    console.log(uuid);
-    console.log(member);
-    console.log(nameGroup);
+    // console.log(uuid);
+    // console.log(member);
+    // console.log(nameGroup);
     // create admin group
 
-    const roomId = await uuidv4();
+    const roomId = await UUID.Generate();
     // console.log(roomId);
 
     const payload = {
       id: `${roomId}`,
       isGroup: true,
       nameGroup: nameGroup,
+      avatar:
+        "https://res.cloudinary.com/dhtypvjsk/image/upload/v1692083201/group-profile-users_icon-icons.com_73540_syhixc.png",
     };
     // console.log(payload);
     const createRoomChat = await roomChatRepository.CreateRoomChat(payload);
@@ -101,18 +118,11 @@ const CreateGroup = async ({ uuid, member, nameGroup }) => {
         isAdmin: isAdmin,
       });
     }
-    // for (let i = 0; i < member.length; i++) {
-    //   const createMemberGroup =
-    //     await memberRoomChatRepository.CreateMemberGroup({
-    //       room_id: createRoomChat.id,
-    //       userId: member[i],
-    //       isAdmin: false,
-    //     });
-    // }
+
     return {
       status: 200,
       message: "success create group",
-      data: null,
+      data: createRoomChat,
     };
   } catch (error) {}
 };
