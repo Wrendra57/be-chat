@@ -7,6 +7,7 @@ const createChat = async (req, res) => {
       content: req.body.content,
       sender_id: req.user.uuid,
     });
+
     return res.status(create.status).json(create);
   } catch (error) {
     return {
@@ -16,5 +17,20 @@ const createChat = async (req, res) => {
     };
   }
 };
+const getAllChat = async (req, res) => {
+  try {
+    const get = await ChatsService.getAllChat({
+      roomId: req.params.roomId,
+    });
 
-module.exports = { createChat };
+    return res.status(get.status).json(get);
+  } catch (error) {
+    return {
+      status: 500,
+      message: error.message,
+      data: null,
+    };
+  }
+};
+
+module.exports = { createChat, getAllChat };

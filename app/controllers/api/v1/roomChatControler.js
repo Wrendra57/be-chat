@@ -36,8 +36,25 @@ const listRoomChat = async (req, res) => {
     return res.status(listRoom.status).json(listRoom);
   } catch (error) {}
 };
+
+const getHeader = async (req, res, next) => {
+  try {
+    const get = await roomChatService.getHeader({
+      uuid: req.user.uuid,
+      roomId: req.params.roomId,
+    });
+    return res.status(get.status).json(get);
+  } catch (error) {
+    return {
+      status: 500,
+      message: error.message,
+      data: null,
+    };
+  }
+};
 module.exports = {
   createRoomChat,
   listRoomChat,
   createGroupRoom,
+  getHeader,
 };

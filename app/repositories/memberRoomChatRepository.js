@@ -9,7 +9,7 @@ const { Op } = require("sequelize");
 
 const createMemberRoomChat = async (params) => {
   //   console.log(params);
-  
+
   const createMemberRoomChat = await MemberRoomChats.create(params);
   return createMemberRoomChat;
 };
@@ -38,5 +38,12 @@ const getListMemberRoomChat = async (params) => {
   //   return getListMemberRoomChat;
   // } catch (error) {}
 };
+const checkMember = async ({ uuid, roomId }) => {
+  const get = await MemberRoomChats.findAll({
+    where: { room_id: roomId, userId: uuid },
+  });
 
-module.exports = { createMemberRoomChat, getListMemberRoomChat };
+  return get;
+};
+
+module.exports = { createMemberRoomChat, getListMemberRoomChat, checkMember };

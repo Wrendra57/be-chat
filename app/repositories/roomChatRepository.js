@@ -52,9 +52,32 @@ where a."userId"='${uuid1}' and b."userId"='${uuid2}'  and c."isGroup"=false
   } catch (error) {}
 };
 
+const getHeaderRoom = async ({ uuid, roomId }) => {
+  console.log(uuid)
+  const getHeader = await sequelize.query(`
+select 
+(case when rc."isGroup"=true then  rc."id" 
+    else mrc."userId" 
+end) as "uuid",
+(case when rc."isGroup"=true then  rc."nameGroup" 
+    else usr."name" 
+end) as "title",
+(case when rc."isGroup"=true then  rc."avatar" 
+    else usr."avatar" 
+end) as "avatar"
+from public."RoomChats" as "rc" 
+left join public."MemberRoomChats" as "mrc" on rc."id"=mrc."room_id" 
+left join public."Users" as "usr" on mrc."userId" = usr."uuid"
+where rc."id"='${roomId}' and mrc."userId" != '${uuid}'`);
+
+  return getHeader[0];
+};
+
+
 module.exports = {
   CreateRoomChat,
   GetListRoomChat,
   findByUuid,
   checkRoomPersonal,
+  getHeaderRoom,
 };

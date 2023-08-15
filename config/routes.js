@@ -69,6 +69,18 @@ apiRouter.post(
   middleware.parseToken,
   controllers.api.v1.chatController.createChat
 );
+
+apiRouter.get(
+  "/api/v1/headerChats/:roomId",
+  middleware.parseToken,
+  controllers.api.v1.roomChatController.getHeader
+);
+apiRouter.get(
+  "/api/v1/Chats/:roomId",
+  middleware.parseToken,
+  controllers.api.v1.chatController.getAllChat
+);
+
 /**
  * TODO: Delete this, this is just a demonstration of
  *       error handler

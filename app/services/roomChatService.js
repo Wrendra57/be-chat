@@ -126,8 +126,41 @@ const CreateGroup = async ({ uuid, member, nameGroup }) => {
     };
   } catch (error) {}
 };
+
+const getHeader = async ({ uuid, roomId }) => {
+  try {
+    if (!roomId) {
+      return {
+        status: 400,
+        message: "room id tidak boleh kosong",
+        data: null,
+      };
+    }
+    const getHeader = await roomChatRepository.getHeaderRoom({ uuid, roomId });
+    console.log(getHeader);
+    if (getHeader.length === 0) {
+      return {
+        status: 400,
+        message: "data tidak ditemukan",
+        data: null,
+      };
+    }
+    return {
+      status: 200,
+      message: "success get header",
+      data: getHeader,
+    };
+  } catch (error) {
+    return {
+      status: 500,
+      message: error.message,
+      data: null,
+    };
+  }
+};
 module.exports = {
   createRoomChatPersonal,
   listRoomChat,
   CreateGroup,
+  getHeader,
 };
