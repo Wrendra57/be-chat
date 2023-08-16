@@ -9,8 +9,8 @@ const CreateRoomChat = async (params) => {
 };
 
 const GetListRoomChat = async (params) => {
-  console.log("ini");
-  console.log(typeof params);
+  // console.log("ini");
+  // console.log(typeof params);
   try {
     const getList = await sequelize.query(
       `Select rc.id, rc."isGroup", rc."nameGroup", rc."avatar", mrc."userId", mrc."isAdmin", u."name", u."avatar" as "profilUser", msg."content" as "messages", msg."sender_id", msg."isRead"  
@@ -25,10 +25,10 @@ const GetListRoomChat = async (params) => {
         else mrc."userId" = '${params}'
       end)
       left join public."Users" as "u" on mrc."userId"=u."uuid" 
-	    left join public."Messages" as "msg" on msg."room_id"= rc."id" and msg."id" in (SELECT MAX(psn."id") FROM public."Messages" as "psn" GROUP BY psn."id" ORDER BY "createdAt" DESC limit 1)
-      where mrc."userId" IS NOT null`
+	    left join public."Messages" as "msg" on msg."room_id"= rc."id" and msg."id" in (SELECT MAX(psn."id") FROM public."Messages" as "psn" where psn."room_id" = rc."id" GROUP BY psn."id" ORDER BY "createdAt" DESC limit 1)
+      where mrc."userId" IS NOT null ORDER BY msg."createdAt" DESC`
     );
-    console.log(getList);
+    // console.log(getList);
     return getList[0];
   } catch (error) {}
 };
@@ -53,7 +53,7 @@ where a."userId"='${uuid1}' and b."userId"='${uuid2}'  and c."isGroup"=false
 };
 
 const getHeaderRoom = async ({ uuid, roomId }) => {
-  console.log(uuid)
+  // console.log(uuid)
   const getHeader = await sequelize.query(`
 select 
 (case when rc."isGroup"=true then  rc."id" 
@@ -72,7 +72,6 @@ where rc."id"='${roomId}' and mrc."userId" != '${uuid}'`);
 
   return getHeader[0];
 };
-
 
 module.exports = {
   CreateRoomChat,

@@ -63,6 +63,11 @@ apiRouter.get(
   controllers.api.v1.roomChatController.listRoomChat
 );
 
+apiRouter.get(
+  "/api/v1/roomChats/:roomId",
+  middleware.parseToken,
+  controllers.api.v1.memberChatController.getMemberGroup
+);
 // create message
 apiRouter.post(
   "/api/v1/Chats",

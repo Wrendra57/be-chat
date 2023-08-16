@@ -10,14 +10,70 @@ const port = process.env.PORT || 8000;
 const { Server } = require("socket.io");
 const http = require("http");
 const server = http.createServer(app);
+
+const chalk = require("chalk");
+const { memberChatController } = require("../app/controllers/api/v1");
+const MemberRoomChatService = require("../app/services/memberRoomChatService");
+const {
+  createMemberRoomChat,
+} = require("../app/repositories/memberRoomChatRepository");
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:3000",
   },
 });
 io.on("connection", (socket) => {
-  socket.on("chat message", (msg) => {
-    console.log("message: " + msg);
+  console.log(chalk.red(`User Connected: ${socket.id}`));
+
+  socket.on("join-room", async ({ roomId }) => {
+    console.log(chalk.red(`${roomId}`));
+    console.log("data");
+    socket.join(roomId);
+    console.log(chalk.red(socket.id + " join room: " + roomId));
+  });
+
+  socket.on("leave-room", async ({ roomId }) => {
+    socket.leave(roomId);
+    console.log(chalk.red(socket.id + " leaveRoom " + roomId));
+  });
+
+  socket.on("send-message", async (data) => {
+    console.log(chalk.green(data));
+    console.log(chalk.green(data.roomId));
+    const getMemberGroup = await MemberRoomChatService.getListMemberGroup({
+      roomId: data.roomId,
+    });
+
+    socket.to(data.roomId).emit("receive-message", data);
+
+    if (getMemberGroup.data.length > 0) {
+      for (let i = 0; i < getMemberGroup.data.length; i++) {
+        if (getMemberGroup.data[i] !== data.sender_id) {
+          socket.to(getMemberGroup.data[i]).emit("receive-notif", data);
+          console.log(
+            chalk.blue(`succes send notif ` + getMemberGroup.data[i])
+          );
+        }
+      }
+    }
+  });
+
+  socket.on("subscribe-notification", async ({ uuid }) => {
+    console.log(chalk.red(`${uuid}`));
+    console.log("data");
+    socket.join(uuid);
+    console.log(chalk.blue(socket.id + " subscribe notif " + uuid));
+  });
+
+  socket.on("unsubscribe-notification", async ({ uuid }) => {
+    socket.leave(uuid);
+    console.log(
+      chalk.red(socket.id + " unsubscribe-notificationeRoom " + uuid)
+    );
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected", socket.id);
   });
 });
 server.listen(port, () =>

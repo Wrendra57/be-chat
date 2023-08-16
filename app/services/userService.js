@@ -209,7 +209,7 @@ const Login = async ({ email, password }) => {
 const ForgotPassword = async ({ email }) => {
   try {
     const getUser = await UserRepository.findByEmail(email);
-    console.log(getUser);
+    // console.log(getUser);
     // const forgotPassword = await
     if (!getUser) {
       return {
@@ -242,14 +242,14 @@ const ForgotPassword = async ({ email }) => {
         expiresIn: JWT.EXPIRED,
       }
     );
-    console.log(token);
+    // console.log(token);
     const sendEmail = await EmailService.SendEmail({
       address: getUser.email,
       subject: "Reset Password",
       template: "sendForgotPassword",
       isi: token,
     });
-    console.log(sendEmail);
+    // console.log(sendEmail);
     return {
       status: 200,
       message: "Success Send Email Forgot Password",
@@ -293,7 +293,7 @@ const updatePassword = async ({ uuid, email, newPassword }) => {
       newPassword,
       getUser.password
     );
-    console.log(comparePasswords);
+    // console.log(comparePasswords);
     if (comparePasswords) {
       return {
         status: 400,
@@ -303,12 +303,12 @@ const updatePassword = async ({ uuid, email, newPassword }) => {
     }
 
     const encodeNewPassword = await Bcrypt.DecodePassword(newPassword);
-    console.log(encodeNewPassword);
+    // console.log(encodeNewPassword);
     const updateArgs = {
       password: encodeNewPassword,
     };
     const updatePassword = await UserRepository.updateByUuid(uuid, updateArgs);
-    console.log(updatePassword);
+    // console.log(updatePassword);
     return {
       status: 200,
       message: "password updated successfully",
@@ -330,7 +330,7 @@ const GetUserDetail = async ({ uuid }) => {
     // console.log(getUser.password);
     user = JSON.parse(JSON.stringify(getUser));
     delete user.password;
-    console.log(user);
+    // console.log(user);
     return {
       status: 200,
       message: "success get details",
@@ -348,7 +348,7 @@ const GetUserDetail = async ({ uuid }) => {
 const getUserByName = async (name) => {
   try {
     const getUser = await UserRepository.findByName(name);
-    console.log(getUser);
+    // console.log(getUser);
     return {
       status: 200,
       message: "success find user",

@@ -9,10 +9,11 @@ const userControler = require("./userControler");
 // const RegisterUser = require("./userControler");
 const roomChatController = require("./roomChatControler");
 const chatController = require("./chat");
-
+const memberChatController = require("./memberChatController");
 module.exports = {
   // postController,
   chatController,
   userControler,
   roomChatController,
+  memberChatController,
 };

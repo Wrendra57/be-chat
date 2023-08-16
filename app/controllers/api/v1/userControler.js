@@ -2,7 +2,7 @@ const userService = require("../../../services/userService");
 const userRepository = require("../../../repositories/userRepository");
 const RegisterUser = async (req, res, next) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
 
     // console.log(uuid);
     const { email, password, name } = req.body;
@@ -12,8 +12,6 @@ const RegisterUser = async (req, res, next) => {
       password: password,
       name: name,
     });
-
-
 
     return res.status(createUser.status).json(createUser);
   } catch (error) {
@@ -42,7 +40,7 @@ const VerifikasiOTP = async (req, res) => {
 
 const Login = async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const Login = await userService.Login({
       email: req.body.email,
       password: req.body.password,
@@ -76,7 +74,7 @@ const ForgotPassword = async (req, res) => {
 
 const updatePassword = async (req, res) => {
   try {
-    console.log(req.user);
+    // console.log(req.user);
     const updatePassword = await userService.updatePassword({
       uuid: req.user.uuid,
       email: req.user.email,
@@ -95,7 +93,7 @@ const updatePassword = async (req, res) => {
 
 const authUser = async (req, res, next) => {
   try {
-    console.log(req.user);
+    // console.log(req.user);
     const getUser = await userService.GetUserDetail({ uuid: req.user.uuid });
     return res.status(getUser.status).json(getUser);
   } catch (error) {

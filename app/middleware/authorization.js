@@ -21,9 +21,9 @@ exports.parseToken = async (req, res, next) => {
         data: null,
       });
     } else {
-      console.log("success");
+      // console.log("success");
       req.user = decoded;
-      console.log(decoded);
+ 
       next();
     }
   } catch (error) {

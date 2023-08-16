@@ -2,7 +2,7 @@
 const { User, sequelize } = require("../models");
 const { Op } = require("sequelize");
 const CreateUser = async (params) => {
-  console.log(params);
+  // console.log(params);
   const createUser = await User.create(params);
   return createUser;
 };
@@ -29,8 +29,8 @@ const updateByEMail = async (email, updateArgs) => {
   return user;
 };
 const updateByUuid = async (uuid, updateArgs) => {
-  console.log(updateArgs);
-  console.log(uuid);
+  // console.log(updateArgs);
+  // console.log(uuid);
   const user = await User.update(updateArgs, { where: { uuid: uuid } });
 
   // console.log(user);

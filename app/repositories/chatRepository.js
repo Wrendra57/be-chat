@@ -14,7 +14,7 @@ const getChat = async ({ roomId }) => {
     where: { room_id: roomId },
     include: { model: User, attributes: ["name"] }, 
   });
-  console.log(get);
+  // console.log(get);
   return get;
 };
 

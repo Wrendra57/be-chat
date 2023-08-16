@@ -9,7 +9,7 @@ const createRoomChatPersonal = async ({ uuid1, uuid2 }) => {
       uuid1: uuid1,
       uuid2: uuid2,
     });
-    console.log(checkRoomPersonal);
+    // console.log(checkRoomPersonal);
     if (checkRoomPersonal.length > 0) {
       return {
         status: 200,
@@ -18,7 +18,7 @@ const createRoomChatPersonal = async ({ uuid1, uuid2 }) => {
       };
     }
     const uuid = await UUID.Generate();
-    console.log(uuid);
+    // console.log(uuid);
 
     const payload = {
       id: uuid,
@@ -26,7 +26,7 @@ const createRoomChatPersonal = async ({ uuid1, uuid2 }) => {
     };
 
     const createRoomChat = await roomChatRepository.CreateRoomChat(payload);
-    console.log(createRoomChat);
+    // console.log(createRoomChat);
 
     const payloadUUID1 = {
       room_id: createRoomChat.id,
@@ -107,7 +107,7 @@ const CreateGroup = async ({ uuid, member, nameGroup }) => {
       payloadAdmin
     );
     member.forEach((element) => {
-      console.log(element);
+      // console.log(element);
       createMember(createRoomChat.id, element, false);
     });
 
@@ -137,7 +137,7 @@ const getHeader = async ({ uuid, roomId }) => {
       };
     }
     const getHeader = await roomChatRepository.getHeaderRoom({ uuid, roomId });
-    console.log(getHeader);
+    // console.log(getHeader);
     if (getHeader.length === 0) {
       return {
         status: 400,
